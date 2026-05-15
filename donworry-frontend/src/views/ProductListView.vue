@@ -53,7 +53,7 @@ onMounted(async () => {
     // 로컬 주소로 접속할 때
     // const res = await axios.get('http://localhost:8000/api/products/')
     // 서버 주소로 접속할 때
-    const res = await axios.get('http://15.165.238.176:8000/api/products/')
+    const res = await axios.get('http://54.180.53.205:8000/api/products/')
 
     products.value = res.data
   } catch (err) {
