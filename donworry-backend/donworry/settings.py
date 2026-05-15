@@ -65,6 +65,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -155,7 +157,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # 정적 파일(JS, CSS) 경로 추가
-STATIC_URL = 'assets/' # Vue 빌드 결과물을 저장하는 공간
+STATIC_URL = '/assets/' # Vue 빌드 결과물을 저장하는 공간
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../donworry-frontend/dist/assets'),
 ]
