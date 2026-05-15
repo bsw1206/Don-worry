@@ -73,7 +73,8 @@ class Command(BaseCommand):
                         stock_info = {
                             "name": "삼성전자",
                             "price": output.get('stck_prpr'),
-                            "change": change_status, # 'RISE'나 'FALL'이 들어갑니다.
+                            "change_num": output.get('prdy_vrss'), # 🎯 DB 저장용 (숫자 형태 문자열)
+                            "change_status": change_status,       # 🎯 Vue 화면용 ('RISE', 'FALL')
                             "timestamp": time.time()
                         }
                         producer.send('stock-data', value=stock_info)

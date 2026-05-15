@@ -46,7 +46,7 @@ class Command(BaseCommand):
                     defaults={
                         "name": data.get("name"),
                         "current_price": current_price,
-                        "change": data.get("change"),
+                        "change": data.get("change_num"), # 🎯 change_num을 저장!
                     }
                 )
                 

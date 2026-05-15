@@ -25,12 +25,12 @@
         <div v-for="(item, index) in realtimeData" :key="index" class="flex items-center space-x-2 text-sm font-semibold shrink-0">
           <span>{{ item.name }}</span>
           
-          <span :class="item.change === 'RISE' ? 'text-red-400' : (item.change === 'FALL' ? 'text-blue-400' : 'text-gray-300')">
-            {{ item.price.toLocaleString() }}원
-            <span v-if="item.change === 'RISE'">▲</span>
-            <span v-else-if="item.change === 'FALL'">▼</span>
-            <span v-else>-</span>
-          </span>
+          <span :class="item.change_status === 'RISE' ? 'text-red-400' : (item.change_status === 'FALL' ? 'text-blue-400' : 'text-gray-300')">
+          {{ Number(item.price).toLocaleString() }}원
+          <span v-if="item.change_status === 'RISE'">▲</span>
+          <span v-else-if="item.change_status === 'FALL'">▼</span>
+          <span v-else>-</span>
+        </span>
         </div>
       </div>
     </div>
