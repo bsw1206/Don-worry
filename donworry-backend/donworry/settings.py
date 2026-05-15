@@ -154,6 +154,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://54.180.53.205:8000",
 ]
 
 # 정적 파일(JS, CSS) 경로 추가
