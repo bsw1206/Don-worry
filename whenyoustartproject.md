@@ -11,7 +11,7 @@
 ```text
 donworry-project/           # 최상위 루트 (Git Init 위치)
 ├── donworry-frontend/      # Vue.js 프로젝트 (Vite + Tailwind v4)
-├── donworry-kafka/         # Django 프로젝트 (DRF + Kafka 연동)
+├── donworry-backend/         # Django 프로젝트 (DRF + Kafka 연동)
 └── whenyoustartpjt.md      # 바로 이 가이드 파일!
 
 ```
@@ -25,7 +25,7 @@ donworry-project/           # 최상위 루트 (Git Init 위치)
 ### 💡 가상환경 생성 및 활성화
 
 ```bash
-cd donworry-kafka
+cd donworry-backend
 
 # 가상환경 생성 (최초 1회)
 python -m venv venv
@@ -75,7 +75,7 @@ npm run dev
 
 | 구분 | 실행 경로 | 명령어 | 접속 주소 |
 | --- | --- | --- | --- |
-| **Backend** | `/donworry-kafka` | `python manage.py runserver` | `http://localhost:8000` |
+| **Backend** | `/donworry-backend` | `python manage.py runserver` | `http://localhost:8000` |
 | **Frontend** | `/donworry-frontend` | `npm run dev` | `http://localhost:5173` |
 
 ### 📥 금융 상품 데이터 수집 (Save API)
@@ -86,8 +86,6 @@ npm run dev
 * **조건:** `.env` 파일에 유효한 `FINLIFE_API_KEY`가 있어야 합니다.
 
 ---
-
-기록은 미래의 나를 위한 가장 큰 선물이죠! `whenyoustartproject.md` 파일에 추가할 **CI/CD 자동화(`deploy.yml`) 가이드**를 아주 깔끔하게 정리해 드릴게요. 나중에 팀원이 합류하거나 승우님이 새로운 프로젝트를 시작할 때 이 문서만 보면 바로 세팅할 수 있게 구성했습니다.
 
 ---
 
@@ -147,7 +145,7 @@ npm run dev
 ### 🌿 Git 관리 규칙
 
 * **최상위 폴더에서만 `git init`을 관리합니다.**
-* 혹시 하위 폴더(`frontend`, `kafka`) 내부에 `.git` 폴더가 있다면 반드시 삭제 후 최상위에서 커밋해 주세요.
+* 혹시 하위 폴더(`donworry-frontend`, `donworry-backend`) 내부에 `.git` 폴더가 있다면 반드시 삭제 후 최상위에서 커밋해 주세요.
 * **절대 커밋 금지:** `node_modules/`, `venv/`, `db.sqlite3`, `.env`
 
 ### 🛠 기술 스택 특이사항
