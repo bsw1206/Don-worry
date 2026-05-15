@@ -46,6 +46,11 @@ FINLIFE_API_KEY = os.getenv('FINLIFE_API_KEY')
 # Application definition
 
 INSTALLED_APPS = [
+    ########################################
+    # 실시간 데이터를 보여주기 위한 app
+    'daphne',
+    'channels',
+    #######################################
     'rest_framework',
     'accounts',
     'products',
@@ -90,6 +95,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'donworry.wsgi.application'
 
+# ASGI도 같이 설정
+ASGI_APPLICATION = 'donworry.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -152,3 +159,16 @@ STATIC_URL = 'assets/' # Vue 빌드 결과물을 저장하는 공간
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../donworry-frontend/dist/assets'),
 ]
+
+##############################################################
+# 채널 레이어 설정 (Redis 필요)
+# 우선 로컬에서 Docker로 Redis를 띄웠다고 가정합니다. (port: 6379)
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+################################################################
