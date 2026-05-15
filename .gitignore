@@ -1,0 +1,46 @@
+# --- OS & IDE 관련 (모든 환경 공통) ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.stackdump
+
+# --- Frontend (Vue.js / Node.js) ---
+node_modules/
+dist/
+dist-ssr/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.timestamp-*-*.mjs
+.eslintcache
+
+# --- Backend (Django / Python) ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+*.log
+pip-log.txt
+.pytest_cache/
+.coverage
+
+# --- 환경 변수 (매우 중요: API 키 보안) ---
+.env
+.env.local
+.env.*.local
+*.local

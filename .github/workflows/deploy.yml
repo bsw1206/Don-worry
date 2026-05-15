@@ -1,0 +1,33 @@
+name: Django EC2 Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH로 EC2에 접속하여 배포 스크립트 실행
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/donworry-kafka
+            git fetch --all
+            git reset --hard origin/master
+            
+            # --- [1] Backend 배포 ---
+            cd backend
+            if [ ! -d "venv" ]; then python3 -m venv venv; fi
+            ./venv/bin/pip install -r requirements.txt
+            ./venv/bin/python manage.py migrate
+            
+            # --- [2] Frontend 배포 ---
+            cd ../frontend
+            npm install        
+            npm run build       
