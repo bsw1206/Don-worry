@@ -163,7 +163,7 @@ STATICFILES_DIRS = [
 ]
 
 ##############################################################
-# 채널 레이어 설정 (Redis 필요)
+# 채널 레이어 설정 (Redis 필요)git 
 # 우선 로컬에서 Docker로 Redis를 띄웠다고 가정합니다. (port: 6379)
 CHANNEL_LAYERS = {
     'default': {
