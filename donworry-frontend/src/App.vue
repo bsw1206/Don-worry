@@ -55,7 +55,7 @@ onMounted(async () => {
   // 🎯 [추가 1] 페이지 접속 시 기존 데이터를 먼저 가져오기 (API 주소는 백엔드 설정에 맞게 변경하세요)
   try {
     // 임시로 주식 데이터를 가져오는 API 엔드포인트라고 가정합니다.
-    const response = await axios.get('http://15.165.238.176:8000/api/v1/products/stocks/'); 
+    const response = await axios.get('http://54.180.53.205:8000/api/v1/products/stocks/'); 
     if (response.data) {
       // 서버에서 가져온 초기 데이터를 티커에 세팅
       // (배열 형태가 아니라면 realtimeData.value = [response.data] 로 묶어주세요)
@@ -66,7 +66,8 @@ onMounted(async () => {
   }
 
   // 🎯 [추가 2] 실제 EC2 서버 주소로 웹소켓 연결
-  socket = new WebSocket('ws://15.165.238.176:8000/ws/products/');
+  // 54.180.53.205는 EC2 서버의 instance주소!
+  socket = new WebSocket('ws://54.180.53.205:8000/ws/products/');
 
   socket.onopen = () => {
     console.log('✅ 웹소켓 연결 성공! (Global App.vue)');
