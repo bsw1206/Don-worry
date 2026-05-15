@@ -19,6 +19,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env_path = BASE_DIR / '.env'
 if env_path.exists():
     load_dotenv(env_path)
+API_KEYS = {
+    'FINLIFE_API_KEY': os.getenv('FINLIFE_API_KEY'),
+    'KIS_MOCK_APP_KEY': os.getenv('KIS_MOCK_APP_KEY'),
+    'KIS_MOCK_APP_SECRET': os.getenv('KIS_MOCK_APP_SECRET'),
+}
 ###################################
 
 # Quick-start development settings - unsuitable for production

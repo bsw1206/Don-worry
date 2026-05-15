@@ -6,12 +6,16 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import FinancialCompany, Product, ProductOption
 from dotenv import load_dotenv
-API_KEY = os.environ.get('FINLIFE_API_KEY')
-load_dotenv()
+
+
 @api_view(['GET'])
 def save_deposit_products(request):
-    print(f"내가 보낼 API 키: {API_KEY}")
-    url = f'http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json?auth={API_KEY}&topFinGrpNo=020000&pageNo=1'
+    # settings.py에서 API_KEY 불러오기
+    finlife_api_key = settings.API_KEYS['FINLIFE_API_KEY']
+    kis_mock_app_key = settings.API_KEYS['KIS_MOCK_APP_KEY']
+    kis_mock_app_secret = settings.API_KEYS['KIS_MOCK_APP_SECRET'] 
+    #############################################################
+    url = f'http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json?auth={finlife_api_key}&topFinGrpNo=020000&pageNo=1'
     response = requests.get(url).json()
     
     # 1. 금융회사 저장
