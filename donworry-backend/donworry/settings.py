@@ -70,7 +70,8 @@ ROOT_URLCONF = 'donworry.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # DIRS를 Vue함수의 dist로 수정
+        'DIRS': [os.path.join(BASE_DIR, '../donworry-frontend/dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,4 +140,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+]
+
+# 정적 파일(JS, CSS) 경로 추가
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, '../donworry-frontend/dist/assets'),
 ]
