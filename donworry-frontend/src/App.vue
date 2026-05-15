@@ -22,15 +22,19 @@
       <div class="max-w-7xl mx-auto px-4 flex space-x-8 overflow-x-auto scrollbar-hide items-center h-6">
         <span class="text-xs font-bold text-gray-400 uppercase tracking-widest shrink-0">Live Market</span>
         
+        <span v-if="realtimeData.length === 0" class="text-sm font-semibold text-gray-500 animate-pulse">
+          초기 데이터 불러오는 중...
+        </span>
+
         <div v-for="(item, index) in realtimeData" :key="index" class="flex items-center space-x-2 text-sm font-semibold shrink-0">
           <span>{{ item.name }}</span>
           
           <span :class="item.change_status === 'RISE' ? 'text-red-400' : (item.change_status === 'FALL' ? 'text-blue-400' : 'text-gray-300')">
-          {{ Number(item.price).toLocaleString() }}원
-          <span v-if="item.change_status === 'RISE'">▲</span>
-          <span v-else-if="item.change_status === 'FALL'">▼</span>
-          <span v-else>-</span>
-        </span>
+            {{ Number(item.price).toLocaleString() }}원
+            <span v-if="item.change_status === 'RISE'">▲</span>
+            <span v-else-if="item.change_status === 'FALL'">▼</span>
+            <span v-else>-</span>
+          </span>
         </div>
       </div>
     </div>
@@ -41,14 +45,28 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import axios from 'axios'; // 🎯 axios 임포트 (API 통신용)
 
 // 1. 실시간 데이터를 담을 배열
 const realtimeData = ref([]);
 let socket = null;
 
-onMounted(() => {
-  // 🎯 로컬 테스트용 주소. 나중에는 서버 IP(15.165...)로 변경하세요!
-  socket = new WebSocket('ws://localhost:8000/ws/products/');
+onMounted(async () => {
+  // 🎯 [추가 1] 페이지 접속 시 기존 데이터를 먼저 가져오기 (API 주소는 백엔드 설정에 맞게 변경하세요)
+  try {
+    // 임시로 주식 데이터를 가져오는 API 엔드포인트라고 가정합니다.
+    const response = await axios.get('http://15.165.238.176:8000/api/v1/products/stocks/'); 
+    if (response.data) {
+      // 서버에서 가져온 초기 데이터를 티커에 세팅
+      // (배열 형태가 아니라면 realtimeData.value = [response.data] 로 묶어주세요)
+      realtimeData.value = response.data;
+    }
+  } catch (err) {
+    console.error('기존 데이터 로드 실패 (API를 확인해주세요):', err);
+  }
+
+  // 🎯 [추가 2] 실제 EC2 서버 주소로 웹소켓 연결
+  socket = new WebSocket('ws://15.165.238.176:8000/ws/products/');
 
   socket.onopen = () => {
     console.log('✅ 웹소켓 연결 성공! (Global App.vue)');
@@ -57,11 +75,18 @@ onMounted(() => {
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     
-    // 배열 맨 앞에 최신 데이터 추가
-    // (만약 종목이 많아지면 배열이 무한정 길어지지 않게 10개만 유지하는 로직)
-    realtimeData.value.unshift(data);
-    if (realtimeData.value.length > 10) {
-      realtimeData.value.pop(); 
+    // 🎯 [개선] 3초마다 배열이 늘어나지 않고, '삼성전자'가 이미 있으면 가격만 갱신!
+    const existingIndex = realtimeData.value.findIndex(item => item.name === data.name);
+    
+    if (existingIndex !== -1) {
+      // 이미 리스트에 있는 종목이면 데이터 덮어쓰기 (화면 즉시 갱신)
+      realtimeData.value[existingIndex] = { ...realtimeData.value[existingIndex], ...data };
+    } else {
+      // 새로운 종목이면 맨 앞에 추가 (최대 10개 유지)
+      realtimeData.value.unshift(data);
+      if (realtimeData.value.length > 10) {
+        realtimeData.value.pop(); 
+      }
     }
   };
 
