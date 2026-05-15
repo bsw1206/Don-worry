@@ -17,17 +17,17 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/ubuntu/donworry-kafka
+            cd /home/ubuntu/pjt-donworry
             git fetch --all
             git reset --hard origin/master
             
             # --- [1] Backend 배포 ---
-            cd backend
+            cd donworry-backend
             if [ ! -d "venv" ]; then python3 -m venv venv; fi
             ./venv/bin/pip install -r requirements.txt
             ./venv/bin/python manage.py migrate
             
             # --- [2] Frontend 배포 ---
-            cd ../frontend
+            cd ../donworry-frontend
             npm install        
             npm run build       
