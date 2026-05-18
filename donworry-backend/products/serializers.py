@@ -14,13 +14,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        # 🚨 [여기 확인!] Vue에서 쓰려는 필드들을 모두 여기에 적어줘야 합니다.
-        fields = [
-            'fin_prdt_cd', 
-            'bank_name', 
-            'fin_prdt_nm', 
-            'options', 
-            'join_way',   # 추가
-            'spcl_cnd',   # 추가
-        ]
+       
+        fields = '__all__'
 

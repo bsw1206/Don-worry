@@ -11,6 +11,8 @@ class Product(models.Model):
     fin_prdt_nm = models.CharField(max_length=100)
     join_way = models.TextField(null=True)
     spcl_cnd = models.TextField(null=True)
+    join_member = models.TextField(null=True)
+    product_type = models.CharField(max_length=20, default='deposit')
 
 class ProductOption(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='options')

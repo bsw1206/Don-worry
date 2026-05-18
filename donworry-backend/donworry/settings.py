@@ -23,6 +23,7 @@ API_KEYS = {
     'FINLIFE_API_KEY': os.getenv('FINLIFE_API_KEY'),
     'KIS_MOCK_APP_KEY': os.getenv('KIS_MOCK_APP_KEY'),
     'KIS_MOCK_APP_SECRET': os.getenv('KIS_MOCK_APP_SECRET'),
+    'KIS_URL': 'https://openapivts.koreainvestment.com:29443',  # 모의투자 서버 도메인
 }
 ###################################
 
