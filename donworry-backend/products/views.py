@@ -83,18 +83,6 @@ class ProductDetailView(generics.RetrieveAPIView):
 # ==========================================
 # 3. 주식 및 화면 렌더링 관련 뷰
 # ==========================================
-def index(request):
-    """메인 페이지 (HTML)"""
-    # filter().first()를 쓰면 데이터가 없을 때 알아서 None을 반환합니다.
-    samsung_stock = Stock.objects.filter(code='005930').first()
-    context = {'samsung_stock': samsung_stock}
-    return render(request, 'products/index.html', context)
-
-def product_list(request):
-    """상품 목록 페이지 (HTML)"""
-    samsung_stock = Stock.objects.filter(code='005930').first()
-    context = {'samsung_stock': samsung_stock}
-    return render(request, 'products/product_list.html', context)
 
 def stock_chart_data(request):
     """주식 차트용 실시간 데이터 반환 API"""

@@ -3,15 +3,20 @@ from django.urls import path, include
 from products import views
 
 # products/urls.py
+# products/urls.py
+from django.urls import path
+from . import views
+
 urlpatterns = [
-    # 기존: path('products/save/', ...) -> 접속: /api/products/save/
-    path('save/', views.save_deposit_products), 
-
-    # 기존: path('products/', ...) -> 접속: /api/products/
-    path('', views.ProductListView.as_view()),
-
-    # ✨ 차트 데이터 경로 (깔끔하게!)
-    # 이제 접속 주소는: /api/stock-chart-data/ 가 됩니다.
+    # GET /api/v1/products/stocks/ -> 전체 상품 목록 조회 (Vue 요청 매칭)
+    path('stocks/', views.ProductListView.as_view(), name='product_list'),
+    
+    # GET /api/v1/products/save/ -> 금감원 데이터 수집 및 저장
+    path('save/', views.save_deposit_products, name='save_products'), 
+    
+    # GET /api/v1/products/stock-chart-data/ -> 차트 데이터 조회
     path('stock-chart-data/', views.stock_chart_data, name='stock_chart_data'),
-    path('<str:fin_prdt_cd>/', views.ProductDetailView.as_view()),
+    
+    # GET /api/v1/products/<상품코드>/ -> 특정 상품 상세 조회 (맨 아래 배치)
+    path('<str:fin_prdt_cd>/', views.ProductDetailView.as_view(), name='product_detail'),
 ]

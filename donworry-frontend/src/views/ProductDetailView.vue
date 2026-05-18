@@ -62,13 +62,15 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { API_BASE_URL } from '@/api' // 🎯 주입
 
 const route = useRoute()
 const product = ref(null)
 
 onMounted(async () => {
   try {
-    const res = await axios.get(`http://localhost:8000/api/products/${route.params.id}/`)
+    // 백엔드 블루프린트 구조 기준 (/api/v1/products/<상품코드>/)
+    const res = await axios.get(`${API_BASE_URL}/${route.params.id}/`)
     product.value = res.data
   } catch (err) {
     console.error(err)

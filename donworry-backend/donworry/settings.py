@@ -35,13 +35,11 @@ SECRET_KEY = 'django-insecure-9l^_s5ov=&u48r5#lca#v(sih2jwykfkw659(qqpp(koy4#y!t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 #############################################################
-ALLOWED_HOSTS = ['54.180.53.205', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 #############################################################
 AUTH_USER_MODEL = 'accounts.User'
 
-#############################################################
-FINLIFE_API_KEY = os.getenv('FINLIFE_API_KEY')
-#############################################################
+
 
 # Application definition
 
@@ -145,27 +143,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://54.180.53.205:8000",
-]
-
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+#############################################################
 # 정적 파일(JS, CSS) 경로 추가
-STATIC_URL = '/assets/' # Vue 빌드 결과물을 저장하는 공간
+STATIC_URL = '/static/' # Vue 빌드 결과물을 저장하는 공간
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '../donworry-frontend/dist/assets'),
+    os.path.join(BASE_DIR, '../donworry-frontend/dist'),
 ]
 
 ##############################################################
 # 채널 레이어 설정 (Redis 필요)git 
 # 우선 로컬에서 Docker로 Redis를 띄웠다고 가정합니다. (port: 6379)
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

@@ -45,16 +45,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { API_BASE_URL } from '@/api' // 🎯 주입
 
 const products = ref([])
 
 onMounted(async () => {
   try {
-    // 로컬 주소로 접속할 때
-    // const res = await axios.get('http://localhost:8000/api/products/')
-    // 서버 주소로 접속할 때
-    const res = await axios.get('http://54.180.53.205:8000/api/products/')
-
+    // 백엔드 블루프린트 구조 기준 (/api/v1/products/stocks/)
+    const res = await axios.get(`${API_BASE_URL}/stocks/`)
     products.value = res.data
   } catch (err) {
     console.error(err)

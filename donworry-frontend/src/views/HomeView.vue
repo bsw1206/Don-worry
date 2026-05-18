@@ -1,75 +1,58 @@
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-bold mb-4">실시간 주식 정보</h1>
+  <div>
+    <div class="p-6">
+       </div>
 
-    <div v-if="stockData" class="bg-gray-800 text-white p-6 rounded-lg shadow-lg w-80">
-      <div class="flex justify-between items-center">
-        <span class="text-xl font-semibold">{{ stockData.name }}</span>
-        <span class="text-sm text-gray-400">실시간</span>
+    <transition name="slide-up">
+      <div v-if="showSurveyOffer" class="fixed bottom-0 left-0 right-0 z-[100] p-6 pointer-events-none">
+        <div class="max-w-xl mx-auto bg-gray-900 text-white p-6 rounded-[2rem] shadow-2xl shadow-blue-900/20 border border-gray-800 pointer-events-auto flex items-center justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <div class="bg-blue-600 p-3 rounded-2xl text-2xl">🤔</div>
+            <div>
+              <h4 class="font-black text-lg leading-tight">잠깐! 성향 조사를 하셨나요?</h4>
+              <p class="text-gray-400 text-sm font-medium">선호도를 파악하여 딱 맞는 상품을 추천해 드릴게요.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button @click="showSurveyOffer = false" class="text-gray-500 hover:text-white px-3 py-2 font-bold text-sm">다음에</button>
+            <router-link to="/survey" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-black text-sm transition-all whitespace-nowrap">
+              조사하기
+            </router-link>
+          </div>
+        </div>
       </div>
-      
-      <div class="mt-4 flex items-baseline">
-        <span class="text-3xl font-bold">
-          {{ Number(stockData.price).toLocaleString() }}원
-        </span>
-        
-        <span 
-          class="ml-2 text-lg font-bold"
-          :class="stockData.change_status === 'RISE' ? 'text-red-500' : (stockData.change_status === 'FALL' ? 'text-blue-500' : 'text-gray-400')"
-        >
-          <span v-if="stockData.change_status === 'RISE'">▲</span>
-          <span v-else-if="stockData.change_status === 'FALL'">▼</span>
-          <span v-else>-</span>
-        </span>
-      </div>
-      
-      <div class="mt-2 text-xs text-gray-500">
-        최근 업데이트: {{ new Date(stockData.timestamp * 1000).toLocaleTimeString() }}
-      </div>
-    </div>
-
-    <div v-else class="text-gray-500 animate-pulse">
-      데이터 수신 대기 중...
-    </div>
+    </transition>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
-// 🎯 데이터를 저장할 반응형 변수
-const stockData = ref(null);
-let socket = null;
+const route = useRoute();
+const showSurveyOffer = ref(false);
 
-onMounted(async () => {
-  // 1. 우선 DB에 저장된 기존 데이터를 API로 가져오기 (이게 있어야 처음에 바로 뜸!)
-  try {
-    const response = await axios.get('http://15.165.238.176:8000/api/v1/products/stocks/');
-    stockData.value = response.data[0]; // 가장 최근 데이터 하나 넣기
-  } catch (err) {
-    console.error("기존 데이터 로드 실패", err);
+onMounted(() => {
+  // ✅ 주소창에 ?newuser=true 가 있으면 1초 뒤에 알림창을 쓱 올림
+  if (route.query.newuser === 'true') {
+    setTimeout(() => {
+      showSurveyOffer.value = true;
+    }, 1000); // 메인 화면이 보이고 1초 뒤에 나오는게 더 자연스럽습니다.
   }
-
-  // 2. 그 다음 실시간 웹소켓 연결
-  const socketUrl = 'ws://15.165.238.176:8000/ws/products/';
-  socket = new WebSocket(socketUrl);
-
-  // 메시지를 받았을 때 실행되는 함수
-  socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    console.log("수신 데이터:", data); // 브라우저 콘솔에서 확인용
-    
-    // 🎯 받아온 데이터를 변수에 저장 -> 화면 자동 갱신!
-    stockData.value = data;
-  };
-
-  socket.onopen = () => console.log("✅ 웹소켓 연결 성공!");
-  socket.onclose = () => console.log("❌ 웹소켓 연결 종료");
-  socket.onerror = (err) => console.error("🚨 웹소켓 에러:", err);
-});
-
-// 페이지를 나갈 때 소켓 닫기
-onUnmounted(() => {
-  if (socket) socket.close();
 });
 </script>
+
+<style scoped>
+/* ✅ 쓱 올라오는 애니메이션 설정 */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+</style>
